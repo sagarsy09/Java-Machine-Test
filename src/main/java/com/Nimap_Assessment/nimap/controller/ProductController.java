@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Nimap_Assessment.nimap.dao.ProductDao;
 import com.Nimap_Assessment.nimap.dto.ResponseStructure;
+import com.Nimap_Assessment.nimap.entity.Category;
 import com.Nimap_Assessment.nimap.entity.Product;
+import com.Nimap_Assessment.nimap.entity.ProductWithCategory;
 import com.Nimap_Assessment.nimap.exception.ResourceNotFoundException;
 import com.Nimap_Assessment.nimap.service.ProductService;
 
@@ -44,7 +46,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<ResponseStructure<Product>> getById(@PathVariable int id){
+	public ResponseEntity<ResponseStructure<ProductWithCategory>> getById(@PathVariable int id){
 		return productService.findById(id);
 	}
 	
@@ -67,7 +69,7 @@ public class ProductController {
 	
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ResponseStructure<Product>> deleteById(@PathVariable int id){
+	public ResponseEntity<ResponseStructure<String>> deleteById(@PathVariable int id){
 		return productService.deleteById(id);
 	}
 }

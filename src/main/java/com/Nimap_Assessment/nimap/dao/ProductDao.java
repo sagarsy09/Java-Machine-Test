@@ -25,6 +25,7 @@ public class ProductDao {
 	
 	
 	public Product getProductById(int id) {
+		
 		 Optional<Product> optional = repository.findById(id);
 		 
 		 if(optional.isPresent()) {
@@ -37,7 +38,12 @@ public class ProductDao {
 		return repository.save(product);
 	}
 	
-	public void deleteProduct(int id) {
-		repository.deleteById(id);
+	public String deleteProduct(int id) {
+		Product product = getProductById(id);
+		if(product != null) {
+			repository.deleteById(id);
+			return "Deleted";
+		}
+		return "Not Deleted";
 	}
 }

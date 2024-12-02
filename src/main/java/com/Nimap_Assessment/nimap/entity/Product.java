@@ -20,9 +20,10 @@ public class Product {
     private Double price;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-//    @JsonIgnore
+//    @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore
     private Category category;
+
 
 	public Long getId() {
 		return id;

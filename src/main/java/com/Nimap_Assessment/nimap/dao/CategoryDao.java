@@ -2,6 +2,7 @@ package com.Nimap_Assessment.nimap.dao;
 
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.Nimap_Assessment.nimap.entity.Category;
+import com.Nimap_Assessment.nimap.entity.Product;
 import com.Nimap_Assessment.nimap.repository.CategoryRepository;
 
 @Repository
@@ -24,11 +26,19 @@ public class CategoryDao {
 	
 
 	public Category createCategory(Category category) {
+		List<Product> products = category.getProducts();
+		
+		if(products != null) {
+			for(Product product : products) {
+				product.setCategory(category);
+			}
+		}
 		return repository.save(category);		
 	}
 	
 
 	public Category getCategoryById(int id) {
+		
 		 Optional<Category> optional = repository.findById(id);
 		 
 		 if(optional.isPresent()) {

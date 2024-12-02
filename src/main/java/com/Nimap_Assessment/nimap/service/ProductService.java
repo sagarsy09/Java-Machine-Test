@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.Nimap_Assessment.nimap.dao.ProductDao;
 import com.Nimap_Assessment.nimap.dto.ResponseStructure;
+import com.Nimap_Assessment.nimap.entity.Category;
 import com.Nimap_Assessment.nimap.entity.Product;
+import com.Nimap_Assessment.nimap.entity.ProductWithCategory;
 
 @Service
 public class ProductService {
@@ -51,15 +53,34 @@ public class ProductService {
 	} 
 	
 	
-	public ResponseEntity<ResponseStructure<Product>> findById(int id){
+	public ResponseEntity<ResponseStructure<ProductWithCategory>> findById(int id){
+		
 		Product productById = dao.getProductById(id);
+		Category category = productById.getCategory();
 		
-		ResponseStructure<Product> structure = new ResponseStructure<Product>();
-		structure.setStatusCode(HttpStatus.OK.value());
-		structure.setMessage("Resouce Retrieved Successfully!");
-		structure.setData(productById);
+		ProductWithCategory productWithCategory = new ProductWithCategory();
 		
-		return new ResponseEntity<ResponseStructure<Product>>(structure , HttpStatus.OK);
+		if(category != null && productById != null) {
+			productWithCategory.setId(category.getId());
+			productWithCategory.setName(category.getName());
+			productWithCategory.setDescription(category.getDescription());
+			productWithCategory.setProduct(productById);
+			
+			ResponseStructure<ProductWithCategory> structure = new ResponseStructure<ProductWithCategory>();
+			structure.setStatusCode(HttpStatus.OK.value());
+			structure.setMessage("Resouce Retrieved Successfully!");
+			structure.setData(productWithCategory);
+			
+			return new ResponseEntity<ResponseStructure<ProductWithCategory>>(structure , HttpStatus.OK);
+		}
+		return null;
+		
+//		ResponseStructure<Product> structure = new ResponseStructure<Product>();
+//		structure.setStatusCode(HttpStatus.OK.value());
+//		structure.setMessage("Resouce Retrieved Successfully!");
+//		structure.setData(productById);
+//		
+//		return new ResponseEntity<ResponseStructure<Product>>(structure , HttpStatus.OK);
 	}
 	
 	
@@ -76,15 +97,15 @@ public class ProductService {
 		return new ResponseEntity<ResponseStructure<Product>>(structure , HttpStatus.ACCEPTED);
 	}
 	
-	public ResponseEntity<ResponseStructure<Product>> deleteById(int id){
-		dao.deleteProduct(id);
+	public ResponseEntity<ResponseStructure<String>> deleteById(int id){
+		String msg = dao.deleteProduct(id);
 		
-		ResponseStructure<Product> structure = new ResponseStructure<Product>();
+		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.OK.value());
 		structure.setMessage("Resource deleted");
-		structure.setData(null);
+		structure.setData(msg);
 		
-		return new ResponseEntity<ResponseStructure<Product>>(structure , HttpStatus.OK);
+		return new ResponseEntity<ResponseStructure<String>>(structure , HttpStatus.OK);
 	}
 
 }
